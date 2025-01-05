@@ -27,12 +27,15 @@ export class AuthService {
       throw new UnauthorizedException('Geçersiz email veya şifre');
     }
 
+    const access_token = await this.jwtService.signAsync({
+      userId: user.id,
+      email: user.email,
+      role: user.role,
+    });
+
     return {
-      access_token: await this.jwtService.signAsync({
-        userId: user.id,
-        email: user.email,
-        role: user.role,
-      }),
+      user,
+      access_token,
     };
   }
 

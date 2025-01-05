@@ -42,5 +42,5 @@ export class Invest {
   interest: Interest;
 
   @Column()
-  interestRateId: number;
+  interestId: number;
 }

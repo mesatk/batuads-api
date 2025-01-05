@@ -23,7 +23,7 @@ import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { Role } from '../auth/role.enum';
 
-@ApiTags('İlgi Alanları')
+@ApiTags('Interests')
 @ApiBearerAuth()
 @Controller('interests')
 @UseGuards(AuthGuard, RolesGuard)

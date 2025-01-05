@@ -9,6 +9,7 @@ import { User } from './entities/user.entity';
 import { Transaction } from './entities/transaction.entity';
 import { Invest } from './entities/invest.entity';
 import { Interest } from './entities/interest.entity';
+import { InterestModule } from './interest/interest.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { Interest } from './entities/interest.entity';
       logging: true,
     }),
     AuthModule,
+    InterestModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

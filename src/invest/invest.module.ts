@@ -8,13 +8,7 @@ import { InvestGateway } from './invest.gateway';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Invest, Interest]),
-    JwtModule.register({
-      secret: 'testKey',
-      signOptions: { expiresIn: '1d' },
-    }),
-  ],
+  imports: [TypeOrmModule.forFeature([Invest, Interest])],
   controllers: [InvestController],
   providers: [InvestService, InvestGateway],
 })

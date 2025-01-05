@@ -4,6 +4,11 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AppGateway } from './app.gateway';
+import { AuthModule } from './auth/auth.module';
+import { User } from './entities/user.entity';
+import { Transaction } from './entities/transaction.entity';
+import { Invest } from './entities/invest.entity';
+import { Interest } from './entities/interest.entity';
 
 @Module({
   imports: [
@@ -15,13 +20,11 @@ import { AppGateway } from './app.gateway';
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || '3728',
       database: process.env.DB_DATABASE || 'batuads',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [User, Transaction, Invest, Interest],
       synchronize: true,
-      autoLoadEntities: true,
-      logging: process.env.NODE_ENV === 'development',
-      retryAttempts: 5,
-      retryDelay: 3000,
+      logging: true,
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

@@ -2,16 +2,37 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { createDatabase } from './database-init';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { User } from './entities/user.entity';
+
+async function createAdminUser(app) {
+  try {
+    const userRepository = app.get(`${User.name}Repository`);
+    const existingAdmin = await userRepository.findOne({
+      where: { email: 'admin@admin.com' },
+    });
+
+    if (!existingAdmin) {
+      const adminUser = userRepository.create({
+        name: 'admin',
+        email: 'admin@admin.com',
+        password: '123456',
+        role: 'admin',
+      });
+
+      await userRepository.save(adminUser);
+      console.log('Admin kullanıcısı başarıyla oluşturuldu');
+    }
+  } catch (error) {
+    console.error('Admin kullanıcısı oluşturulurken hata:', error);
+  }
+}
 
 async function bootstrap() {
   try {
-    // Önce veritabanını oluşturmayı dene
     await createDatabase();
 
-    // Sonra uygulamayı başlat
     const app = await NestFactory.create(AppModule);
 
-    // Swagger konfigürasyonu
     const config = new DocumentBuilder()
       .setTitle('BatuAds API')
       .setDescription('BatuAds API dokümantasyonu')
@@ -21,6 +42,9 @@ async function bootstrap() {
 
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document);
+
+    // Admin kullanıcısını oluştur
+    await createAdminUser(app);
 
     await app.listen(3000);
     console.log('Uygulama 3000 portunda başlatıldı');

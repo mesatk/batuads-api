@@ -41,8 +41,9 @@ export class InvestGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
       console.log('************************Client connected:', client.id);
       console.log('************************Token:', token);
-      const payload = this.jwtService.verifyAsync(token);
-      console.log('************************Payload:', payload);
+      //const payload = await this.jwtService.verifyAsync(token);
+      //console.log('************************Payload:', payload);
+      //const userId = payload.userId;
       const userId = 11;
       console.log('************************UserId:', userId);
 

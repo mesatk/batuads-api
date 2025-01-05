@@ -33,6 +33,13 @@ async function bootstrap() {
 
     const app = await NestFactory.create(AppModule);
 
+    // CORS ayarları
+    app.enableCors({
+      origin: 'http://localhost:4000',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      credentials: true,
+    });
+
     const config = new DocumentBuilder()
       .setTitle('BatuAds API')
       .setDescription('BatuAds API dokümantasyonu')

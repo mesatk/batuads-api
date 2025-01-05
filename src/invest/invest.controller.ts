@@ -49,6 +49,15 @@ export class InvestController {
     return this.investService.findByUserId(req.user.userId);
   }
 
+  @Get('status/pending')
+  @Roles(Role.ADMIN)
+  @ApiOperation({
+    summary: 'Bekleyen (pending) yatırımları listele (Sadece admin)',
+  })
+  findPendingInvests() {
+    return this.investService.findPendingInvests();
+  }
+
   @Patch(':id')
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Yatırım durumunu güncelle (Sadece admin)' })

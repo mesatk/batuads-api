@@ -78,4 +78,11 @@ export class InvestService {
     invest.status = updateInvestDto.status;
     return this.investRepository.save(invest);
   }
+
+  findPendingInvests() {
+    return this.investRepository.find({
+      where: { status: InvestStatus.PENDING },
+      relations: ['user', 'interest'],
+    });
+  }
 }

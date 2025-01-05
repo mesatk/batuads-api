@@ -19,15 +19,19 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { Interest } from '../entities/interest.entity';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
+import { Role } from '../auth/role.enum';
 
 @ApiTags('İlgi Alanları')
 @ApiBearerAuth()
 @Controller('interests')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class InterestController {
   constructor(private readonly interestService: InterestService) {}
 
   @Post()
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Yeni bir ilgi alanı oluştur' })
   @ApiResponse({
     status: 201,
@@ -35,6 +39,10 @@ export class InterestController {
     type: Interest,
   })
   @ApiResponse({ status: 401, description: 'Yetkisiz erişim' })
+  @ApiResponse({
+    status: 403,
+    description: 'Bu işlem için admin yetkisi gereklidir',
+  })
   create(@Body() createInterestDto: CreateInterestDto) {
     return this.interestService.create(createInterestDto);
   }
@@ -65,6 +73,7 @@ export class InterestController {
   }
 
   @Put(':id')
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: "ID'ye göre ilgi alanı güncelle" })
   @ApiResponse({
     status: 200,
@@ -72,6 +81,10 @@ export class InterestController {
     type: Interest,
   })
   @ApiResponse({ status: 401, description: 'Yetkisiz erişim' })
+  @ApiResponse({
+    status: 403,
+    description: 'Bu işlem için admin yetkisi gereklidir',
+  })
   @ApiResponse({ status: 404, description: 'İlgi alanı bulunamadı' })
   update(
     @Param('id') id: string,
@@ -81,9 +94,14 @@ export class InterestController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: "ID'ye göre ilgi alanı sil" })
   @ApiResponse({ status: 200, description: 'İlgi alanı başarıyla silindi.' })
   @ApiResponse({ status: 401, description: 'Yetkisiz erişim' })
+  @ApiResponse({
+    status: 403,
+    description: 'Bu işlem için admin yetkisi gereklidir',
+  })
   @ApiResponse({ status: 404, description: 'İlgi alanı bulunamadı' })
   remove(@Param('id') id: string) {
     return this.interestService.remove(+id);
